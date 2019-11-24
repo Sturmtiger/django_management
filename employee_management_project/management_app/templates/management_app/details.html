@@ -1,0 +1,60 @@
+{% extends 'management_app/base_layout.html' %}
+{% block title %}Companies list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+<link rel="stylesheet" href="{% static 'management_app/css/details.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div>
+            <h1>Company name: {{ company.name }}</h1>
+
+        <p>Managers:</p>
+        <ol>
+            {% for manager in company.manager_set.all %}
+            <li>{{ manager.name }} {{ manager.surname }}</li>
+            {% empty %}
+            <li>There are no managers in the company</li>
+            {% endfor %}
+        </ol>
+
+
+        <p>Jobs:</p>
+        <ul>
+            {% for job in company.job_set.all %}
+            <li>Job name: {{ job.name }}</li>
+
+            <li>
+                <ul>
+                    <li>Work place count: {{ job.workplace_set.count }}</li>
+                    <li>Employees:</li>
+
+                    <li>
+                        <ol>
+                            {% for workplace in job.workplace_set.all%}
+                            <li>
+                                {% if workplace.employee %}
+                                    {{ workplace.employee.name }}
+                                    {{ workplace.employee.surname }}
+                                {% else %}
+                                    Vacant
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </li>
+                    
+                </ul>
+            </li>
+            {% empty %}
+                <li>There are no jobs in the company</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+
+

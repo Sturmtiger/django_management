@@ -1,0 +1,14 @@
+{% extends 'management_app/base_layout.html' %}
+
+{% block title %}Companies list{% endblock %}
+
+{% block content %}
+    <h1>Companies list:</h1>
+    <ul>
+    {% for company in companies %}
+        <li><a href="{{ company.get_absolute_url }}">{{ company.name }}</a></li>
+    {% empty %}
+        <li>There are no companies</li>
+    {% endfor %}
+    </ol>
+{% endblock %}
