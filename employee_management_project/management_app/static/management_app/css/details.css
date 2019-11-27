@@ -1,3 +1,19 @@
-ul {
-    list-style-type: none;
+.work-list-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.work-list-item {
+    width: 200px;
+    background: rgba(56, 22, 138, 0.3);
+    border: 2px rgba(11, 82, 163, 0.5) solid;
+    margin-bottom: 20px;
+    padding: 10px;
+    word-wrap: break-word;
+}
+
+.not-found {
+    color:rgb(214, 29, 29);
 }

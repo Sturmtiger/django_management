@@ -1,10 +1,14 @@
-{% extends 'management_app/base_layout.html' %}
-
+{% extends 'management_app/layout.html' %}
 {% block title %}Companies list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+<link rel="stylesheet" href="{% static 'management_app/css/index.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1>Companies list:</h1>
-    <ul>
+    <ul class='companies-list'>
     {% for company in companies %}
         <li><a href="{{ company.get_absolute_url }}">{{ company.name }}</a></li>
     {% empty %}
