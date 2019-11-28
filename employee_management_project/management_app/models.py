@@ -3,11 +3,10 @@ from django.shortcuts import reverse
 
 # Create your models here.
 
-class Company(models.Model):
-    name = models.CharField(max_length=100)
 
-    def get_absolute_url(self):
-        return reverse('details', kwargs={'id': self.id})
+class Company(models.Model):
+    """Company model."""
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return f'"{self.name}"(id:{self.id}) the Company'
@@ -17,16 +16,35 @@ class Company(models.Model):
 
 
 class Manager(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    """Manager model."""
+    company = models.ForeignKey(
+        Company,
+        related_name='managers',
+        on_delete=models.CASCADE,
+        )
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
 
     def __str__(self):
-        return f'{self.name} {self.surname}(id:{self.id}) the Manager at {self.company}'
+        return f'{self.name} {self.surname}(id:{self.id}) '
+        'the Manager at {self.company}'
+
+
+class Employee(models.Model):
+    """Employee model."""
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'{self.name} {self.surname}(id:{self.id}) the Employee'
 
 
 class Job(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    """Job model."""
+    company = models.ForeignKey(
+        Company,
+        related_name='jobs',
+        on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -34,19 +52,20 @@ class Job(models.Model):
 
 
 class WorkPlace(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    """Work place model."""
+    job = models.ForeignKey(
+        Job,
+        related_name='workplaces',
+        on_delete=models.CASCADE)
+    employee = models.OneToOneField(
+        Employee,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        )
 
     def __str__(self):
         return f'Work place(id:{self.id}) of {self.job}'
-    
 
-class Employee(models.Model):
-    work_place = models.OneToOneField(
-        WorkPlace,
-        on_delete=models.CASCADE, 
-        )
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'{self.name} {self.surname}(id:{self.id}) the Employee of {self.work_place}'
+    class Meta:
+        ordering = ['-employee']

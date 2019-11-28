@@ -14,9 +14,9 @@
 
         <hr>
         <p>Managers:</p>
-        {% if company.manager_set.all %}
+        {% if company.managers.all %}
         <ol>
-            {% for manager in company.manager_set.all %}
+            {% for manager in company.managers.all %}
             <li>{{ manager.name }} {{ manager.surname }}</li>
             {% endfor %}
         </ol>
@@ -26,14 +26,14 @@
 
         <hr>
         <p>Jobs:</p>
-        {% if company.job_set.all %}
+        {% if company.jobs.all %}
         <div class='work-list-container'>
-            {% for job in company.job_set.all %}
+            {% for job in company.jobs.all %}
             <div class='work-list-item'>
                 <p>{{ job.name }}</p>
-                {% if job.workplace_set.all %}
+                {% if job.workplaces.all %}
                 <ol>
-                    {% for workplace in job.workplace_set.all %}
+                    {% for workplace in job.workplaces.all %}
                     <li>
                         {% if workplace.employee %}
                         <span>
