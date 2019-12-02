@@ -1,0 +1,23 @@
+{% extends 'management_app/layout.html' %}
+{% block title %}Employees list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Employees list:</h1>
+<ul>
+    {% for employee in employees %}
+    <li>
+        <a href="{% url 'employee_details' employee.id %}">
+            {{ employee.name }}
+            {{ employee.surname }}
+        </a>
+    </li>
+    {% empty %}
+    <li>There are no employees</li>
+    {% endfor %}
+</ul>
+{% endblock %}

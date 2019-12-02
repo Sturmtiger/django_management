@@ -1,18 +1,14 @@
 {% extends 'management_app/layout.html' %}
 {% block title %}Companies list{% endblock %}
 
-{% load static %}
-{% block css_link %}
-<link rel="stylesheet" href="{% static 'management_app/css/index.css' %}">
-{% endblock %}
 
 {% block content %}
     <h1>Companies list:</h1>
     <ul class='companies-list'>
     {% for company in companies %}
-        <li><a href="{% url 'details' company.id %}">{{ company.name }}</a></li>
+        <li><a href="{% url 'company_details' company.id %}">{{ company.name }}</a></li>
     {% empty %}
         <li>There are no companies</li>
     {% endfor %}
-    </ol>
+    </ul>
 {% endblock %}

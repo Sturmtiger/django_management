@@ -1,5 +1,4 @@
 from django.db import models
-from django.shortcuts import reverse
 
 # Create your models here.
 
@@ -63,9 +62,48 @@ class WorkPlace(models.Model):
         null=True,
         on_delete=models.CASCADE,
         )
+    
+    STATUSES = [
+        ('N', 'New'),
+        ('A', 'Approved'),
+        ('C', 'Cancelled'),
+        ('F', 'Finished'),
+    ]
+    status = models.CharField(
+        max_length=1,
+        choices=STATUSES,
+        default='N',
+        )
 
     def __str__(self):
         return f'Work place(id:{self.id}) of {self.job}'
 
     class Meta:
         ordering = ['-employee']
+
+
+class WorkTime(models.Model):
+    """Worktime model."""
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        related_name='worktimes',
+    )
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name='worktimes',
+    )
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+
+    STATUSES = [
+        ('N', 'New'),
+        ('A', 'Approved'),
+        ('C', 'Cancelled'),
+    ]
+    status = models.CharField(
+        max_length=1,
+        choices=STATUSES,
+        default='N',
+        )

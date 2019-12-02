@@ -6,14 +6,10 @@
 }
 
 .work-list-item {
-    width: 200px;
+    width: 250px;
     background: rgba(56, 22, 138, 0.3);
     border: 2px rgba(11, 82, 163, 0.5) solid;
     margin-bottom: 20px;
     padding: 10px;
-    word-wrap: break-word;
-}
-
-.not-found {
-    color:rgb(214, 29, 29);
+    word-wrap: break-word;  
 }

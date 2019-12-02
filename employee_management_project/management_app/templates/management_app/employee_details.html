@@ -1,0 +1,40 @@
+{% extends 'management_app/layout.html' %}
+{% block title %}Companies list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+<link rel="stylesheet" href="{% static 'management_app/css/details.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        <hr>
+        <h1> Employee name: {{ employee.name }} {{ employee.surname }}</h1>
+        <hr>
+        <p>Jobs:</p>
+        <div class="work-list-container">
+
+            {% for job in jobs %}
+            <div class="work-list-item">
+                <p>{{ job }}</p>
+                <a href="{% url 'worktime_create' employee.id job.id%}">Create work time?</a>
+            </div>
+            {% endfor %}
+
+            {% for worktime in worktimes %}
+            <div class="work-list-item">
+                <p>{{ worktime.job }}</p>
+                <p>Start: {{ worktime.date_start }}</p>
+                <p>End: {{ worktime.date_end }}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

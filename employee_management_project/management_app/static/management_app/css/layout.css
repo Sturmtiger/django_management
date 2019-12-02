@@ -4,3 +4,19 @@
     font-family: 'Calistoga', cursive;
 
 }
+
+.not-found {
+    color:rgb(214, 29, 29);
+}
+
+.vacant-place {
+    color: rgb(62, 214, 31);
+}
+
+div.form {
+    width: 400px;
+}
+
+div.form a {
+    margin-left: 30px;
+}

@@ -1,0 +1,18 @@
+{% extends 'management_app/layout.html' %}
+{% block title %}Employees list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+
+{% endblock %}
+
+{% block content %}
+<div class="form">
+    <h1>Hire employee</h1>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+        <a href="{% url 'company_details' pk=company_pk %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

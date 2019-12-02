@@ -1,0 +1,59 @@
+{% extends 'management_app/layout.html' %}
+{% block title %}Companies list{% endblock %}
+
+{% load static %}
+{% block css_link %}
+<link rel="stylesheet" href="{% static 'management_app/css/details.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <hr>
+    <h1>Company name: {{ company.name }}</h1>
+
+    <hr>
+    <a href="{% url 'company_managers_list' company.id %}">Managers list</a>
+
+    <hr>
+    <p>Jobs:</p>
+    {% if not company.jobs.all %}
+    <p class='not-found'>There are no jobs in the company</p>
+    {% endif %}
+
+    <div class='work-list-container'>
+
+        <div class="work-list-item">
+            <a href="{% url 'job_create' company.id %}">Create new job</a>
+        </div>
+
+        {% for job in company.jobs.all %}
+        <div class='work-list-item'>
+            <p>{{ job.name }}</p>
+            {% if job.workplaces.all %}
+            <ol>
+                {% for workplace in job.workplaces.all %}
+                <li>
+                    {% if workplace.employee %}
+                    <span>
+                        {{ workplace.employee.name }}
+                        {{ workplace.employee.surname }}
+                    </span>
+                    {% else %}
+                    <a href="{% url 'workplace_hire' pk=workplace.id %}" class='vacant-place'>
+                        Vacant place
+                    </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p class='not-found'>There are no work places at this company job</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
