@@ -12,22 +12,22 @@
         <hr>
         <h1> Employee name: {{ employee.name }} {{ employee.surname }}</h1>
         <hr>
-        <p>Jobs:</p>
+        <p>Workplaces:</p>
         <div class="work-list-container">
 
-            {% for job in jobs %}
+            {% for workplace in workplaces %}
             <div class="work-list-item">
-                <p>{{ job }}</p>
-                <a href="{% url 'worktime_create' employee.id job.id%}">Create work time?</a>
+                <p>{{ workplace.job.name }} in {{ workplace.job.company.name }}</p>
+                {% for wtime in workplace.worktimes.all %}
+                <div class="border border-info mb-2">
+                    <p>Start: {{ wtime.date_start|date:"d/m/Y H:i" }}</p>
+                    <p>End: {{ wtime.date_end|date:"d/m/Y H:i" }}</p>
+                </div>
+                {% endfor %}
+                <a href="{% url 'worktime_create' workplace.id %}?next={{ request.path }}">Create worktime</a>
             </div>
-            {% endfor %}
-
-            {% for worktime in worktimes %}
-            <div class="work-list-item">
-                <p>{{ worktime.job }}</p>
-                <p>Start: {{ worktime.date_start }}</p>
-                <p>End: {{ worktime.date_end }}</p>
-            </div>
+            {% empty %}
+            <p class='not-found'>There are no workplaces</p>
             {% endfor %}
 
         </div>

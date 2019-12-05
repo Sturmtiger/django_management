@@ -12,7 +12,7 @@
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save">
-        <a href="{% url 'company_details' pk=company_id %}">Cancel</a>
+        <a href="{{ next }}">Cancel</a>
     </form>
 </div>
 {% endblock %}

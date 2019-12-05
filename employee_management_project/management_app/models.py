@@ -20,13 +20,13 @@ class Manager(models.Model):
         Company,
         related_name='managers',
         on_delete=models.CASCADE,
-        )
+    )
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
 
     def __str__(self):
-        return f'{self.name} {self.surname}(id:{self.id}) '
-        'the Manager at {self.company}'
+        return (f'{self.name} {self.surname}(id:{self.id}) '
+                f'the Manager at {self.company}')
 
 
 class Employee(models.Model):
@@ -52,28 +52,32 @@ class Job(models.Model):
 
 class WorkPlace(models.Model):
     """Work place model."""
+    NEW = 'N'
+    APPROVED = 'A'
+    CANCELLED = 'C'
+    FINISHED = 'F'
+    STATUS = [
+        (NEW, 'New'),
+        (APPROVED, 'Approved'),
+        (CANCELLED, 'Cancelled'),
+        (FINISHED, 'Finished'),
+    ]
+
     job = models.ForeignKey(
         Job,
         related_name='workplaces',
         on_delete=models.CASCADE)
-    employee = models.OneToOneField(
+    employee = models.ForeignKey(
         Employee,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        )
-    
-    STATUSES = [
-        ('N', 'New'),
-        ('A', 'Approved'),
-        ('C', 'Cancelled'),
-        ('F', 'Finished'),
-    ]
+    )
     status = models.CharField(
         max_length=1,
-        choices=STATUSES,
-        default='N',
-        )
+        choices=STATUS,
+        default=NEW,
+    )
 
     def __str__(self):
         return f'Work place(id:{self.id}) of {self.job}'
@@ -84,26 +88,25 @@ class WorkPlace(models.Model):
 
 class WorkTime(models.Model):
     """Worktime model."""
-    employee = models.ForeignKey(
-        Employee,
-        on_delete=models.CASCADE,
-        related_name='worktimes',
-    )
-    job = models.ForeignKey(
-        Job,
+    NEW = 'N'
+    APPROVED = 'A'
+    CANCELLED = 'C'
+    STATUS = [
+        (NEW, 'New'),
+        (APPROVED, 'Approved'),
+        (CANCELLED, 'Cancelled'),
+    ]
+
+    workplace = models.ForeignKey(
+        WorkPlace,
         on_delete=models.CASCADE,
         related_name='worktimes',
     )
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
 
-    STATUSES = [
-        ('N', 'New'),
-        ('A', 'Approved'),
-        ('C', 'Cancelled'),
-    ]
     status = models.CharField(
         max_length=1,
-        choices=STATUSES,
-        default='N',
-        )
+        choices=STATUS,
+        default=NEW,
+    )

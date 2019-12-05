@@ -24,7 +24,7 @@
     <div class='work-list-container'>
 
         <div class="work-list-item">
-            <a href="{% url 'job_create' company.id %}">Create new job</a>
+            <a href="{% url 'job_create' company.id %}?next={{ request.path }}">Create new job</a>
         </div>
 
         {% for job in company.jobs.all %}
@@ -38,9 +38,10 @@
                     <span>
                         {{ workplace.employee.name }}
                         {{ workplace.employee.surname }}
+                        ({{ workplace.get_status_display }})
                     </span>
                     {% else %}
-                    <a href="{% url 'workplace_hire' pk=workplace.id %}" class='vacant-place'>
+                    <a href="{% url 'workplace_hire' pk=workplace.id %}?next={{ request.path }}" class='vacant-place'>
                         Vacant place
                     </a>
                     {% endif %}
