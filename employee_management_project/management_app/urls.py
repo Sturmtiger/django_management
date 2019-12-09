@@ -26,5 +26,5 @@ urlpatterns = [
          name='workplace_hire'),
     path('workplace/<int:workplace_id>/worktime-create/',
          views.CreateWorkTimeView.as_view(),
-         name='worktime_create')
+         name='worktime_create'),
 ]

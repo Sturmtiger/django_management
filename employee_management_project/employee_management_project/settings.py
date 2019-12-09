@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+from django.utils.log import DEFAULT_LOGGING
+
+import logging
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,6 +34,7 @@ SECRET_KEY = '-!5mf&5b_6_q^7#!-d&r^g^y8=#(@6l4@8*)x2t3m31eltlv3&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ALLOWED_HOSTS = ['127.0.0.1']
 ALLOWED_HOSTS = []
 
 
@@ -119,3 +129,32 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'handlers': {
+        'sentry_handler': {
+            'level': 'DEBUG',
+            'class': 'sentry_sdk.integrations.logging.BreadcrumbHandler',
+        },
+    },
+    'loggers': {
+        'sentry_logger': {
+            'handlers': ['sentry_handler'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+sentry_logging = LoggingIntegration(
+    level=logging.DEBUG,        # Capture DEBUG and above as breadcrumbs
+    event_level=logging.INFO  # Send INFO as events
+)
+
+sentry_sdk.init(
+    dsn="https://5224ead0c0e84af493e3313ef88e2b17@sentry.io/1849071",
+    integrations=[sentry_logging],
+)

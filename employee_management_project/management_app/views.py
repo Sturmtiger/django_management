@@ -1,9 +1,14 @@
+import logging
+
 from django.shortcuts import get_object_or_404
 from django.views.generic import (ListView, DetailView,
-                                  CreateView, UpdateView)
+                                  CreateView, UpdateView, FormView)
 from .models import (Company, Manager,
                      Employee, Job, WorkPlace, WorkTime)
+from .forms import WorkTimeForm
 
+
+sentry_logger = logging.getLogger('sentry_logger')
 
 # Create your views here.
 
@@ -49,6 +54,21 @@ class CreateJobView(CreateView):
     def get_success_url(self):
         return self.request.GET.get('next', '/')
 
+    def form_valid(self, form):
+        self.object = form.save()
+
+        posted_data = self.request.POST
+        sentry_logger.debug(
+            'Job data',
+            extra={
+                'company_id': posted_data['company'],
+                'job_name': posted_data['name']
+            }
+        )
+        sentry_logger.info('Created Job')
+
+        return super().form_valid(form)
+
 
 class EmployeesListView(ListView):
     """Employees list View."""
@@ -82,15 +102,26 @@ class HireEmployeeView(UpdateView):
     def get_success_url(self):
         return self.request.GET.get('next', '/')
 
+    def form_valid(self, form):
+        self.object = form.save()
 
-class CreateWorkTimeView(CreateView):
+        posted_data = self.request.POST
+        if posted_data['employee']:
+            sentry_logger.debug(
+                'Employee data',
+                extra={
+                    'employee_id': posted_data['employee'],
+                }
+            )
+            sentry_logger.info('Hired employee')
+
+        return super().form_valid(form)
+
+
+class CreateWorkTimeView(FormView):
     """Create worktime View."""
-    model = WorkTime
-    fields = [
-        'workplace',
-        'date_start',
-        'date_end',
-    ]
+    form_class = WorkTimeForm
+    template_name = 'management_app/worktime_form.html'
 
     def get_initial(self):
         workplace = get_object_or_404(Job, id=self.kwargs.get('workplace_id'))
@@ -103,3 +134,19 @@ class CreateWorkTimeView(CreateView):
 
     def get_success_url(self):
         return self.request.GET.get('next', '/')
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        posted_data = self.request.POST
+        sentry_logger.debug(
+            'Worktime data',
+            extra={
+                'workplace_id': posted_data['workplace'],
+                'date_start': posted_data['date_start'],
+                'date_end': posted_data['date_end'],
+            }
+        )
+        sentry_logger.info('Hired employee')
+
+        return super().form_valid(form)

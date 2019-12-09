@@ -1,18 +1,24 @@
 from django.db import models
 
+# Contants for status field
+NEW = 'N'
+APPROVED = 'A'
+CANCELLED = 'C'
+FINISHED = 'F'
+
 # Create your models here.
 
 
 class Company(models.Model):
     """Company model."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return f'"{self.name}"(id:{self.id}) the Company'
 
     class Meta:
         verbose_name_plural = 'Companies'
-
+    
 
 class Manager(models.Model):
     """Manager model."""
@@ -48,14 +54,13 @@ class Job(models.Model):
 
     def __str__(self):
         return f'{self.name}(id:{self.id}) the Job at {self.company}'
+    
+    class Meta:
+        unique_together = ['company', 'name']
 
 
 class WorkPlace(models.Model):
     """Work place model."""
-    NEW = 'N'
-    APPROVED = 'A'
-    CANCELLED = 'C'
-    FINISHED = 'F'
     STATUS = [
         (NEW, 'New'),
         (APPROVED, 'Approved'),
@@ -83,14 +88,12 @@ class WorkPlace(models.Model):
         return f'Work place(id:{self.id}) of {self.job}'
 
     class Meta:
+        unique_together = ['job', 'employee']
         ordering = ['-employee']
 
 
 class WorkTime(models.Model):
     """Worktime model."""
-    NEW = 'N'
-    APPROVED = 'A'
-    CANCELLED = 'C'
     STATUS = [
         (NEW, 'New'),
         (APPROVED, 'Approved'),
