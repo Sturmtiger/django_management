@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from ..models import Company, Job, WorkPlace, Employee
 
@@ -7,7 +7,6 @@ class CompaniesListViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.companies_list_url = reverse('companies_list')
 
     def test_companies_list_GET(self):
@@ -20,7 +19,6 @@ class EmployeesListViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.employees_list_url = reverse('employees_list')
 
     def test_employees_list_GET(self):
@@ -33,24 +31,6 @@ class CompanyDetailsTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
-        cls.company = Company.objects.create(
-            name='Boston Dynamics',
-        )
-        cls.company_details_url = reverse(
-            'company_details', kwargs={'pk': cls.company.id})
-
-    def test_company_details_GET(self):
-        resp = self.client.get(self.company_details_url)
-
-        self.assertEqual(resp.status_code, 200)
-
-
-class CompanyDetailsTestCase(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.client = Client()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
         )
@@ -67,7 +47,6 @@ class CompanyManagersListTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
         )
@@ -84,7 +63,6 @@ class CreateJobTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
         )
@@ -116,7 +94,6 @@ class HireEmployeeViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
         )
@@ -139,21 +116,21 @@ class HireEmployeeViewTestCase(TestCase):
 
         self.assertEqual(resp.status_code, 200)
 
-    # # dont work correctly
-    # def test_hire_employee_POST(self): 
-    #     self.assertIsNone(self.workplace.employee)
-    #     resp = self.client.post(self.workplace_hire_url,
-    #         'employee': self.employee.id,
-    #     })
-    #     self.assertEqual(resp.status_code, 302)
-    #     self.assertEqual(self.workplace.employee, self.employee)
+    # dont work correctly
+    def test_hire_employee_POST(self):
+        self.assertIsNone(self.workplace.employee)
+        resp = self.client.post(self.workplace_hire_url, {
+            'employee': self.employee.id,
+        })
+        self.assertEqual(resp.status_code, 302)
+        self.workplace.refresh_from_db()
+        self.assertEqual(self.workplace.employee, self.employee)
 
 
 class CreateWorkTimeViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
         )
@@ -171,12 +148,12 @@ class CreateWorkTimeViewTestCase(TestCase):
         )
         cls.worktime_create_url = reverse(
             'worktime_create', kwargs={'workplace_id': cls.workplace.id})
-    
+
     def test_create_worktime_GET(self):
         resp = self.client.get(self.worktime_create_url)
 
         self.assertEqual(resp.status_code, 200)
-    
+
     def test_start_date_is_greater_than_end_date(self):
         resp = self.client.post(self.worktime_create_url, {
             'workplace': self.workplace.id,
@@ -194,5 +171,5 @@ class CreateWorkTimeViewTestCase(TestCase):
             'date_end': '01/12/2019 23:18',
         })
 
-        self.assertEqual(resp.status_code, 302)
         self.assertEqual(self.workplace.worktimes.count(), 1)
+        self.assertEqual(resp.status_code, 302)
