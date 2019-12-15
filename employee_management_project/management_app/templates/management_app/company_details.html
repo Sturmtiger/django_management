@@ -1,4 +1,4 @@
-{% extends 'management_app/layout.html' %}
+{% extends 'layout.html' %}
 {% block title %}Companies list{% endblock %}
 
 {% load static %}
@@ -37,7 +37,6 @@
                     {% if workplace.employee %}
                     <span>
                         {{ workplace.employee.name }}
-                        {{ workplace.employee.surname }}
                         ({{ workplace.get_status_display }})
                     </span>
                     {% else %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Contants for status field
 NEW = 'N'
@@ -12,13 +13,14 @@ FINISHED = 'F'
 class Company(models.Model):
     """Company model."""
     name = models.CharField(max_length=100, unique=True)
+    weekly_hours_limit = models.IntegerField()
 
     def __str__(self):
         return f'"{self.name}"(id:{self.id}) the Company'
 
     class Meta:
         verbose_name_plural = 'Companies'
-    
+
 
 class Manager(models.Model):
     """Manager model."""
@@ -27,21 +29,19 @@ class Manager(models.Model):
         related_name='managers',
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return (f'{self.name} {self.surname}(id:{self.id}) '
+        return (f'{self.name}(id:{self.id}) '
                 f'the Manager at {self.company}')
 
 
 class Employee(models.Model):
     """Employee model."""
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.name} {self.surname}(id:{self.id}) the Employee'
+        return f'{self.name}(id:{self.id}) the Employee'
 
 
 class Job(models.Model):
@@ -50,11 +50,11 @@ class Job(models.Model):
         Company,
         related_name='jobs',
         on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.name}(id:{self.id}) the Job at {self.company}'
-    
+
     class Meta:
         unique_together = ['company', 'name']
 
@@ -74,6 +74,7 @@ class WorkPlace(models.Model):
         on_delete=models.CASCADE)
     employee = models.ForeignKey(
         Employee,
+        related_name='workplaces',
         blank=True,
         null=True,
         on_delete=models.CASCADE,
@@ -94,22 +95,36 @@ class WorkPlace(models.Model):
 
 class WorkTime(models.Model):
     """Worktime model."""
-    STATUS = [
-        (NEW, 'New'),
-        (APPROVED, 'Approved'),
-        (CANCELLED, 'Cancelled'),
-    ]
-
     workplace = models.ForeignKey(
         WorkPlace,
         on_delete=models.CASCADE,
         related_name='worktimes',
     )
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
-
-    status = models.CharField(
-        max_length=1,
-        choices=STATUS,
-        default=NEW,
+    date = models.DateField()
+    hours_worked = models.IntegerField(
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(12),
+        ]
     )
+
+    def __str__(self):
+        return f'WorkTime({self.id}) of {self.workplace}({self.workplace.id})'
+
+    class Meta:
+        unique_together = ['workplace', 'date']
+        ordering = ['-date']
+
+
+class Statistics(models.Model):
+    """Statistics model.
+    Object: the sum of the working hours 
+    of individual employees at 7-day intervals
+    and timestamp.
+    """
+    workplace = models.ForeignKey(
+        WorkPlace,
+        on_delete=models.CASCADE,
+    )
+    hours_total = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)

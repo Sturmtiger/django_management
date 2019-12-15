@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone as tz
+
 from ..models import Company, Job, WorkPlace, Employee
 
 
@@ -7,12 +9,17 @@ class CompaniesListViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.company = Company.objects.create(
+            name='Boston Dynamics',
+            weekly_hours_limit=40,
+        )
         cls.companies_list_url = reverse('companies_list')
 
     def test_companies_list_GET(self):
         resp = self.client.get(self.companies_list_url)
 
         self.assertEqual(resp.status_code, 200)
+        self.assertEquals(resp.context['companies'].count(), 1)
 
 
 class EmployeesListViewTestCase(TestCase):
@@ -33,6 +40,7 @@ class CompanyDetailsTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.company_details_url = reverse(
             'company_details', kwargs={'pk': cls.company.id})
@@ -49,6 +57,7 @@ class CompanyManagersListTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.company_managers_list_url = reverse(
             'company_managers_list', kwargs={'company_id': cls.company.id})
@@ -65,6 +74,7 @@ class CreateJobTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.job_create_url = reverse(
             'job_create', kwargs={'company_id': cls.company.id})
@@ -96,6 +106,7 @@ class HireEmployeeViewTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.job = Job.objects.create(
             company=cls.company,
@@ -105,8 +116,7 @@ class HireEmployeeViewTestCase(TestCase):
             job=cls.job,
         )
         cls.employee = Employee.objects.create(
-            name='James',
-            surname='Bondarchuk',
+            name='James Bondarchuk',
         )
         cls.workplace_hire_url = reverse(
             'workplace_hire', kwargs={'pk': cls.workplace.id})
@@ -133,14 +143,14 @@ class CreateWorkTimeViewTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.job = Job.objects.create(
             company=cls.company,
             name='Python Developer',
         )
         cls.employee = Employee.objects.create(
-            name='James',
-            surname='Bondarchuk',
+            name='James Bondarchuk',
         )
         cls.workplace = WorkPlace.objects.create(
             job=cls.job,
@@ -154,11 +164,11 @@ class CreateWorkTimeViewTestCase(TestCase):
 
         self.assertEqual(resp.status_code, 200)
 
-    def test_start_date_is_greater_than_end_date(self):
+    def test_date_is_less_today(self):
         resp = self.client.post(self.worktime_create_url, {
             'workplace': self.workplace.id,
-            'date_start': '01/12/2019 23:18',
-            'date_end': '01/12/2016 23:18',
+            'date': tz.localdate() - tz.timedelta(2),
+            'hours_worked': '12',
         })
 
         self.assertEqual(resp.status_code, 200)
@@ -167,8 +177,8 @@ class CreateWorkTimeViewTestCase(TestCase):
     def test_create_worktime(self):
         resp = self.client.post(self.worktime_create_url, {
             'workplace': self.workplace.id,
-            'date_start': '01/12/2016 23:18',
-            'date_end': '01/12/2019 23:18',
+            'date': tz.localdate(),
+            'hours_worked': '12',
         })
 
         self.assertEqual(self.workplace.worktimes.count(), 1)

@@ -3,25 +3,31 @@ import logging
 from django.shortcuts import get_object_or_404
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView, FormView)
-from .models import (Company, Manager,
-                     Employee, Job, WorkPlace, WorkTime)
-from .forms import WorkTimeForm
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
 
+from .models import (Company, Manager, Employee, Job,
+                     WorkPlace, WorkTime)
+from .models import APPROVED, FINISHED
+from .forms import WorkTimeForm
+# from .tasks import *
 
 sentry_logger = logging.getLogger('sentry_logger')
 
 # Create your views here.
 
 
-class CompaniesListView(ListView):
+class CompaniesListView(LoginRequiredMixin, ListView):
     """Companies list View."""
     model = Company
     template_name = 'management_app/companies_list.html'
     context_object_name = 'companies'
 
 
-class CompanyDetailsView(DetailView):
+class CompanyDetailsView(PermissionRequiredMixin, DetailView):
     """Companies details View."""
+    permission_required = 'management_app.view_company'
+
     model = Company
     template_name = 'management_app/company_details.html'
 
@@ -82,12 +88,6 @@ class EmployeeDetailsView(DetailView):
     model = Employee
     template_name = 'management_app/employee_details.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        employee = self.get_object()  # employee object
-        context['workplaces'] = WorkPlace.objects.filter(employee=employee)
-        return context
-
 
 class HireEmployeeView(UpdateView):
     """Hire employee View."""
@@ -103,7 +103,19 @@ class HireEmployeeView(UpdateView):
         return self.request.GET.get('next', '/')
 
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        # set status of 'approved' when the employee is hired
+        self.object.status = APPROVED
+        self.object.save()
+
+        # set status of 'finished' for previous workplaces of the employee
+        employee = self.object.employee
+        prev_unfinished_workplaces = employee.workplaces.exclude(
+            Q(id=self.object.id) | Q(status=FINISHED)
+        )
+        for workplace in prev_unfinished_workplaces:
+            workplace.status = FINISHED
+            workplace.save()
 
         posted_data = self.request.POST
         if posted_data['employee']:
@@ -124,7 +136,8 @@ class CreateWorkTimeView(FormView):
     template_name = 'management_app/worktime_form.html'
 
     def get_initial(self):
-        workplace = get_object_or_404(Job, id=self.kwargs.get('workplace_id'))
+        workplace = get_object_or_404(
+            WorkPlace, id=self.kwargs.get('workplace_id'))
         return {'workplace': workplace}
 
     def get_context_data(self, **kwargs):
@@ -143,10 +156,10 @@ class CreateWorkTimeView(FormView):
             'Worktime data',
             extra={
                 'workplace_id': posted_data['workplace'],
-                'date_start': posted_data['date_start'],
-                'date_end': posted_data['date_end'],
+                'date': posted_data['date'],
+                'hours_worked': posted_data['hours_worked'],
             }
         )
-        sentry_logger.info('Hired employee')
+        sentry_logger.info('Created worktime')
 
         return super().form_valid(form)

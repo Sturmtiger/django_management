@@ -6,10 +6,13 @@
 }
 
 .work-list-item {
+    box-sizing: border-box;
     width: 250px;
+    height: 250px;
     background: rgba(56, 22, 138, 0.3);
     border: 2px rgba(11, 82, 163, 0.5) solid;
     margin-bottom: 20px;
     padding: 10px;
     word-wrap: break-word;  
+    overflow-y: scroll;
 }

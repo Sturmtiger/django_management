@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+# sentry 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from django.utils.log import DEFAULT_LOGGING
+# celery
+from celery.schedules import crontab
 
 import logging
 
@@ -47,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'management_app.apps.ManagementAppConfig'
+    'management_app.apps.ManagementAppConfig',
+    'auth_app.apps.AuthAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +68,7 @@ ROOT_URLCONF = 'employee_management_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -129,32 +132,57 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'handlers': {
-        'sentry_handler': {
-            'level': 'DEBUG',
-            'class': 'sentry_sdk.integrations.logging.BreadcrumbHandler',
-        },
-    },
-    'loggers': {
-        'sentry_logger': {
-            'handlers': ['sentry_handler'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'companies_list'
+LOGOUT_REDIRECT_URL = 'login'
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': True,
+#     'handlers': {
+#         'sentry_handler': {
+#             'level': 'DEBUG',
+#             'class': 'sentry_sdk.integrations.logging.BreadcrumbHandler',
+#         },
+#     },
+#     'loggers': {
+#         'sentry_logger': {
+#             'handlers': ['sentry_handler'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
+
+# sentry_logging = LoggingIntegration(
+#     level=logging.DEBUG,        # Capture DEBUG and above as breadcrumbs
+#     event_level=logging.INFO  # Send INFO as events
+# )
+
+# sentry_sdk.init(
+#     dsn="https://5224ead0c0e84af493e3313ef88e2b17@sentry.io/1849071",
+#     integrations=[sentry_logging],
+# )
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+CELERY_TIMEZONE = 'Europe/Kiev'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_ROUTES = {
+    'management_app.tasks.send_mail': {'queue': 'email'}
+}
+CELERY_BEAT_SCHEDULE = {
+    'create_statistics': {
+        'task': 'management_app.tasks.create_statistics',
+        'schedule': crontab(hour=0, minute=0, day_of_week=1,),
     },
 }
-
-sentry_logging = LoggingIntegration(
-    level=logging.DEBUG,        # Capture DEBUG and above as breadcrumbs
-    event_level=logging.INFO  # Send INFO as events
-)
-
-sentry_sdk.init(
-    dsn="https://5224ead0c0e84af493e3313ef88e2b17@sentry.io/1849071",
-    integrations=[sentry_logging],
-)

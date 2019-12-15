@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% block title %}Hire employee{% endblock %}
+{% block title %}Log in{% endblock %}
 
 {% load static %}
 {% block css_link %}
@@ -7,12 +7,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="form">
-    <h1>Hire employee</h1>
+<div class='form'>
+    <h1>Log in</h1>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save">
-        <a href="{{ next }}">Cancel</a>
+        <input type="submit" value="Log in">
     </form>
 </div>
 {% endblock %}

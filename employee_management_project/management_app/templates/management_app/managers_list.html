@@ -1,5 +1,5 @@
-{% extends 'management_app/layout.html' %}
-{% block title %}Employees list{% endblock %}
+{% extends 'layout.html' %}
+{% block title %}Managers list{% endblock %}
 
 {% block content %}
 <h1>Managers list:</h1>
@@ -7,7 +7,6 @@
     {% for manager in managers %}
     <li>
         {{ manager.name }}
-        {{ manager.surname }}
     </li>
     {% empty %}
     <li>

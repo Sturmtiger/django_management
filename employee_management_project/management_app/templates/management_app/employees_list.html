@@ -1,4 +1,4 @@
-{% extends 'management_app/layout.html' %}
+{% extends 'layout.html' %}
 {% block title %}Employees list{% endblock %}
 
 {% load static %}
@@ -13,7 +13,6 @@
     <li>
         <a href="{% url 'employee_details' employee.id %}">
             {{ employee.name }}
-            {{ employee.surname }}
         </a>
     </li>
     {% empty %}

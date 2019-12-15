@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Datetimepicker -->
-    <link rel="stylesheet" href="{% static 'management_app/dtpicker/jquery.datetimepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dtpicker/jquery.datetimepicker.min.css' %}">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/2c036519fc.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="{% static 'management_app/css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     {% block css_link %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -31,8 +31,8 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <!-- Datetimepicker -->
-    <script src="{% static 'management_app/dtpicker/jquery.datetimepicker.full.min.js' %}"></script>
-    
+    <script src="{% static 'dtpicker/jquery.datetimepicker.full.min.js' %}"></script>
+
     <header>
         <nav class="navbar navbar-expand navbar-dark bg-primary">
             <a class="navbar-brand" href="#">Management</a>
@@ -49,6 +49,21 @@
                         <a class="nav-link" href="{% url 'employees_list' %}">Employees list</a>
                     </li>
                 </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            {{ user.username }} (Log out)
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log in</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
             </div>
         </nav>
     </header>

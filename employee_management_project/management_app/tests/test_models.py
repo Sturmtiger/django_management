@@ -10,12 +10,14 @@ class CompanyTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
 
     def test_unique_company_name(self):
         with self.assertRaises(IntegrityError):
             Company.objects.create(
                 name='Boston Dynamics',
+                weekly_hours_limit=40,
             )
 
 
@@ -25,11 +27,11 @@ class ManagerTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.manager = Manager.objects.create(
             company=cls.company,
-            name='James',
-            surname='Bondov',
+            name='James Bondov',
         )
 
     def test_manager(self):
@@ -43,9 +45,11 @@ class JobTestCase(TestCase):
         super().setUpClass()
         cls.company1 = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.company2 = Company.objects.create(
             name='Rudy Corporation',
+            weekly_hours_limit=40,
         )
         cls.job = Job.objects.create(
             company=cls.company1,
@@ -70,14 +74,14 @@ class WorkPlaceTestCase(TestCase):
         super().setUpClass()
         cls.company = Company.objects.create(
             name='Boston Dynamics',
+            weekly_hours_limit=40,
         )
         cls.job = Job.objects.create(
             company=cls.company,
             name='Engineer',
         )
         cls.employee = Employee.objects.create(
-            name='John',
-            surname='Smith',
+            name='John Smith',
         )
         cls.workplace = WorkPlace.objects.create(
             job=cls.job,

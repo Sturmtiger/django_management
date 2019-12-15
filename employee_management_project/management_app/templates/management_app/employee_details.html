@@ -1,5 +1,5 @@
-{% extends 'management_app/layout.html' %}
-{% block title %}Companies list{% endblock %}
+{% extends 'layout.html' %}
+{% block title %}Employee details{% endblock %}
 
 {% load static %}
 {% block css_link %}
@@ -8,33 +8,37 @@
 
 {% block content %}
 
-    <div>
-        <hr>
-        <h1> Employee name: {{ employee.name }} {{ employee.surname }}</h1>
-        <hr>
-        <p>Workplaces:</p>
-        <div class="work-list-container">
+<div>
 
-            {% for workplace in workplaces %}
-            <div class="work-list-item">
-                <p>{{ workplace.job.name }} in {{ workplace.job.company.name }}</p>
-                {% for wtime in workplace.worktimes.all %}
-                <div class="border border-info mb-2">
-                    <p>Start: {{ wtime.date_start|date:"d/m/Y H:i" }}</p>
-                    <p>End: {{ wtime.date_end|date:"d/m/Y H:i" }}</p>
-                </div>
-                {% endfor %}
-                <a href="{% url 'worktime_create' workplace.id %}?next={{ request.path }}">Create worktime</a>
+    <hr>
+    <h1> Employee name: {{ employee.name }}</h1>
+    <hr>
+    <p>Workplaces:</p>
+    <div class="work-list-container">
+
+        {% for workplace in employee.workplaces.all %}
+        <div class="work-list-item">
+            
+            <p>{{ workplace.job.name }} in {{ workplace.job.company.name }}</p>
+            {% if workplace.get_status_display == 'Approved' %}
+            <a href="{% url 'worktime_create' workplace.id %}?next={{ request.path }}">Create worktime</a>
+            {% else %}
+            <p class='not-found'>Finished</p>
+            {% endif %}
+
+            {% for wtime in workplace.worktimes.all|slice:':7' %}
+            <div class="border border-info mb-2">
+                <p>Date: {{ wtime.date }}</p>
+                <p>Hours worked: {{ wtime.hours_worked }}</p>
             </div>
-            {% empty %}
-            <p class='not-found'>There are no workplaces</p>
             {% endfor %}
-
         </div>
+        {% empty %}
+        <p class='not-found'>There are no workplaces</p>
+        {% endfor %}
 
     </div>
 
+</div>
+
 {% endblock %}
-
-
-

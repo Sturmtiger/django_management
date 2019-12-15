@@ -1,4 +1,6 @@
 from django import forms
+from django.utils import timezone
+
 from .models import WorkTime
 
 
@@ -6,12 +8,10 @@ class WorkTimeForm(forms.ModelForm):
     """WorkTime form."""
     class Meta:
         model = WorkTime
-        fields = ['workplace', 'date_start', 'date_end']
+        fields = ['workplace', 'date', 'hours_worked']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        start_date = cleaned_data.get("date_start")
-        end_date = cleaned_data.get("date_end")
-
-        if end_date < start_date:
-            raise forms.ValidationError("End date should be greater than start date.")
+    def clean_date(self):
+        data = self.cleaned_data['date']
+        if data != timezone.localdate():
+            raise forms.ValidationError('Date must be today')
+        return data
