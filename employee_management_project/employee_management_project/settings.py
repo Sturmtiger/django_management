@@ -142,33 +142,33 @@ LOGIN_REDIRECT_URL = 'companies_list'
 LOGOUT_REDIRECT_URL = 'login'
 
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': True,
-#     'handlers': {
-#         'sentry_handler': {
-#             'level': 'DEBUG',
-#             'class': 'sentry_sdk.integrations.logging.BreadcrumbHandler',
-#         },
-#     },
-#     'loggers': {
-#         'sentry_logger': {
-#             'handlers': ['sentry_handler'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'handlers': {
+        'sentry_handler': {
+            'level': 'DEBUG',
+            'class': 'sentry_sdk.integrations.logging.BreadcrumbHandler',
+        },
+    },
+    'loggers': {
+        'sentry_logger': {
+            'handlers': ['sentry_handler'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
 
-# sentry_logging = LoggingIntegration(
-#     level=logging.DEBUG,        # Capture DEBUG and above as breadcrumbs
-#     event_level=logging.INFO  # Send INFO as events
-# )
+sentry_logging = LoggingIntegration(
+    level=logging.DEBUG,        # Capture DEBUG and above as breadcrumbs
+    event_level=logging.INFO  # Send INFO as events
+)
 
-# sentry_sdk.init(
-#     dsn="https://5224ead0c0e84af493e3313ef88e2b17@sentry.io/1849071",
-#     integrations=[sentry_logging],
-# )
+sentry_sdk.init(
+    dsn="https://5224ead0c0e84af493e3313ef88e2b17@sentry.io/1849071",
+    integrations=[sentry_logging],
+)
 
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
