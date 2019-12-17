@@ -3,7 +3,6 @@ import logging
 from django.shortcuts import get_object_or_404
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView, FormView)
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
 
 from .models import (Company, Manager, Employee, Job,
@@ -17,17 +16,15 @@ sentry_logger = logging.getLogger('sentry_logger')
 # Create your views here.
 
 
-class CompaniesListView(LoginRequiredMixin, ListView):
+class CompaniesListView(ListView):
     """Companies list View."""
     model = Company
     template_name = 'management_app/companies_list.html'
     context_object_name = 'companies'
 
 
-class CompanyDetailsView(PermissionRequiredMixin, DetailView):
+class CompanyDetailsView(DetailView):
     """Companies details View."""
-    permission_required = 'management_app.view_company'
-
     model = Company
     template_name = 'management_app/company_details.html'
 
@@ -75,7 +72,7 @@ class CreateJobView(CreateView):
 
         return super().form_valid(form)
 
-
+    
 class EmployeesListView(ListView):
     """Employees list View."""
     model = Employee

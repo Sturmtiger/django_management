@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'management_app.apps.ManagementAppConfig',
-    'auth_app.apps.AuthAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -178,11 +177,17 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TASK_ROUTES = {
-    'management_app.tasks.send_mail': {'queue': 'email'}
+    'management_app.tasks.create_statistics': {'queue': 'create_statistics'},
+    'management_app.tasks.send_mail_if_overtime': {'queue': 'send_mail'}
 }
 CELERY_BEAT_SCHEDULE = {
     'create_statistics': {
         'task': 'management_app.tasks.create_statistics',
-        'schedule': crontab(hour=0, minute=0, day_of_week=1,),
+        # 'schedule': crontab(hour=0, minute=0, day_of_week=1,),
+        'schedule': 10,
     },
 }
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
