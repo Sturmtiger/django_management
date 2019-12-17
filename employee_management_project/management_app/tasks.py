@@ -1,3 +1,4 @@
+from celery.utils.log import get_task_logger
 from django.utils import timezone as tz
 from django.core.mail import send_mail
 
@@ -22,7 +23,7 @@ def register_employees():
             name=person['name']
         )
 
-from celery.utils.log import get_task_logger
+
 logger = get_task_logger(__name__)
 @app.task(name='management_app.tasks.create_statistics')
 def create_statistics():
@@ -48,17 +49,18 @@ def create_statistics():
             workplace=workplace,
             hours_total=hours_total,
         )
-        logger.info('Hours total: %d' % hours_total )
+        logger.info('Hours total: %d' % hours_total)
         company = workplace.job.company
         employee_name = workplace.employee.name
-        managers_emails = company.managers.values_list('email', flat=True)
+        managers_emails = list(
+            company.managers.values_list('email', flat=True))
 
-        # send_mail_if_overtime.delay(
-            # employee_name=employee_name,
-            # hours_limit=company.weekly_hours_limit,
-            # hours_total=hours_total,
-            # recipient_list=managers_emails,
-        # )
+        send_mail_if_overtime.delay(
+            employee_name=employee_name,
+            hours_limit=company.weekly_hours_limit,
+            hours_total=hours_total,
+            recipient_list=managers_emails,
+        )
 
 
 @app.task(name='management_app.tasks.send_mail_if_overtime')

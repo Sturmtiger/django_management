@@ -141,6 +141,9 @@ LOGIN_REDIRECT_URL = 'companies_list'
 LOGOUT_REDIRECT_URL = 'login'
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -183,11 +186,6 @@ CELERY_TASK_ROUTES = {
 CELERY_BEAT_SCHEDULE = {
     'create_statistics': {
         'task': 'management_app.tasks.create_statistics',
-        # 'schedule': crontab(hour=0, minute=0, day_of_week=1,),
-        'schedule': 10,
+        'schedule': crontab(hour=0, minute=0, day_of_week=1),
     },
 }
-
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
