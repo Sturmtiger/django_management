@@ -1,8 +1,6 @@
-from celery.utils.log import get_task_logger
 from django.utils import timezone as tz
 from django.core.mail import send_mail
 
-from celery.task import subtask
 import requests
 
 from employee_management_project.celery_app import app
@@ -24,10 +22,9 @@ def register_employees():
         )
 
 
-logger = get_task_logger(__name__)
 @app.task(name='management_app.tasks.create_statistics')
 def create_statistics():
-    """Creates statistics of hours 
+    """Creates statistics of hours
     worked per week of employees.
     Employee's workplace must have Approved
     status.
@@ -49,31 +46,30 @@ def create_statistics():
             workplace=workplace,
             hours_total=hours_total,
         )
-        logger.info('Hours total: %d' % hours_total)
+
         company = workplace.job.company
         employee_name = workplace.employee.name
         managers_emails = list(
             company.managers.values_list('email', flat=True))
-
-        send_mail_if_overtime.delay(
-            employee_name=employee_name,
-            hours_limit=company.weekly_hours_limit,
-            hours_total=hours_total,
-            recipient_list=managers_emails,
-        )
+        overtime_hours = hours_total - company.weekly_hours_limit
+        if overtime_hours > 0:
+            send_mail_if_overtime.delay(
+                employee_name=employee_name,
+                overtime_hours=overtime_hours,
+                recipient_list=managers_emails,
+            )
 
 
 @app.task(name='management_app.tasks.send_mail_if_overtime')
-def send_mail_if_overtime(employee_name, hours_limit, hours_total, recipient_list):
-    """Sends mail to the company managers 
-    if the employee has overtimed 
+def send_mail_if_overtime(employee_name, overtime_hours, recipient_list):
+    """Sends mail to the company managers
+    where the employee has overtimed
     weekly hours limit in the company.
     """
-    if hours_total > hours_limit:
-        send_mail(
-            subject='Employee %s. Overtime!' % employee_name,
-            message='Employee %s has overtimed the established weekly hours limit for %d.' % (
-                employee_name, hours_total-hours_limit),
-            from_email='dummy@gmail.com',
-            recipient_list=recipient_list,
-        )
+    send_mail(
+        subject='Employee %s. Overtime!' % employee_name,
+        message='Employee %s has overtimed the established weekly hours limit for %d.' % (
+            employee_name, overtime_hours),
+        from_email='dummy@gmail.com',
+        recipient_list=recipient_list,
+    )
