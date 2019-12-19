@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-19 15:22+0200\n"
+"POT-Creation-Date: 2019-12-20 00:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,118 +20,124 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: management_app/templates/management_app/companies_list.html:3
-#: management_app/templates/management_app/companies_list.html:7
+#: templates/management_app/companies_list.html:3
+#: templates/management_app/companies_list.html:7
 msgid "Companies list"
 msgstr "Список компаний"
 
-#: management_app/templates/management_app/companies_list.html:12
+#: templates/management_app/companies_list.html:12
 msgid "There are no companies"
 msgstr "Компании не найдены"
 
-#: management_app/templates/management_app/company_details.html:3
+#: templates/management_app/company_details.html:3
 msgid "Company details"
 msgstr "Детальная информация о компании"
 
-#: management_app/templates/management_app/company_details.html:14
+#: templates/management_app/company_details.html:14
 msgid "Company name"
 msgstr "Название компании"
 
-#: management_app/templates/management_app/company_details.html:17
-#: management_app/templates/management_app/managers_list.html:3
+#: templates/management_app/company_details.html:17
+#: templates/management_app/managers_list.html:3
+#: templates/management_app/managers_list.html:6
 msgid "Managers list"
 msgstr "Список менеджеров"
 
-#: management_app/templates/management_app/company_details.html:20
+#: templates/management_app/company_details.html:20
 msgid "Jobs"
 msgstr "Работы"
 
-#: management_app/templates/management_app/company_details.html:22
+#: templates/management_app/company_details.html:22
 msgid "There are no jobs in the company"
 msgstr "В данной компании нет работ"
 
-#: management_app/templates/management_app/company_details.html:28
+#: templates/management_app/company_details.html:28
 msgid "Create new job"
 msgstr "Создать новую работу"
 
-#: management_app/templates/management_app/company_details.html:45
+#: templates/management_app/company_details.html:45
 msgid "Vacant place"
 msgstr "Вакантное место"
 
-#: management_app/templates/management_app/company_details.html:52
+#: templates/management_app/company_details.html:52
 msgid "There are no work places at this job"
 msgstr "На этой работе нет рабочих мест"
 
-#: management_app/templates/management_app/employee_details.html:3
+#: templates/management_app/employee_details.html:3
 msgid "Employee details"
 msgstr "Детальная информация о работнике"
 
-#: management_app/templates/management_app/employee_details.html:15
+#: templates/management_app/employee_details.html:15
 msgid "Employee name"
 msgstr "Имя работника"
 
-#: management_app/templates/management_app/employee_details.html:17
+#: templates/management_app/employee_details.html:17
 msgid "Workplaces"
 msgstr "Рабочие места"
 
-#: management_app/templates/management_app/employee_details.html:25
+#: templates/management_app/employee_details.html:25
 msgid "Create worktime"
 msgstr "Создать время работы"
 
-#: management_app/templates/management_app/employee_details.html:27
+#: templates/management_app/employee_details.html:27
 msgid "Finished"
 msgstr "Завершено"
 
-#: management_app/templates/management_app/employee_details.html:32
+#: templates/management_app/employee_details.html:32
 msgid "Date"
 msgstr "Дата"
 
-#: management_app/templates/management_app/employee_details.html:33
+#: templates/management_app/employee_details.html:33
 msgid "Hours worked"
 msgstr "Часов отработано"
 
-#: management_app/templates/management_app/employee_details.html:38
+#: templates/management_app/employee_details.html:38
 msgid "There are no workplaces"
 msgstr "Рабочие места не найдены"
 
-#: management_app/templates/management_app/employees_list.html:3
-#: management_app/templates/management_app/employees_list.html:11
+#: templates/management_app/employees_list.html:3
+#: templates/management_app/employees_list.html:11
 msgid "Employees list"
 msgstr "Список работников"
 
-#: management_app/templates/management_app/employees_list.html:20
+#: templates/management_app/employees_list.html:20
 msgid "There are no employees"
 msgstr "Работники не найдены"
 
-#: management_app/templates/management_app/job_form.html:3
-#: management_app/templates/management_app/job_form.html:12
+#: templates/management_app/job_form.html:3
+#: templates/management_app/job_form.html:12
 msgid "Create job"
 msgstr "Создать работу"
 
-#: management_app/templates/management_app/job_form.html:15
-#: management_app/templates/management_app/workplace_form.html:15
-#: management_app/templates/management_app/worktime_form.html:15
+#: templates/management_app/job_form.html:15
+#: templates/management_app/workplace_form.html:15
+#: templates/management_app/worktime_form.html:15
 msgid "Save"
 msgstr "Сохранить"
 
-#: management_app/templates/management_app/managers_list.html:14
+#: templates/management_app/managers_list.html:14
 msgid "There are no managers"
 msgstr "Менеджеры не найдены"
 
-#: management_app/templates/management_app/workplace_form.html:3
-#: management_app/templates/management_app/workplace_form.html:12
+#: templates/management_app/workplace_form.html:3
+#: templates/management_app/workplace_form.html:12
 msgid "Hire employee"
 msgstr "Нанять работника"
 
-#: management_app/templates/management_app/workplace_form.html:16
-#: management_app/templates/management_app/worktime_form.html:16
+#: templates/management_app/workplace_form.html:16
+#: templates/management_app/worktime_form.html:16
 msgid "Cancel"
 msgstr "Отменить"
 
-#: management_app/templates/management_app/worktime_form.html:3
+#: templates/management_app/worktime_form.html:3
 msgid "Worktime create"
 msgstr "Создать время работы"
 
-#: management_app/templates/management_app/worktime_form.html:12
+#: templates/management_app/worktime_form.html:12
 msgid "Create worktime for workplace"
 msgstr "Создать время работы для рабочего места"
+
+#, fuzzy
+#~| msgid "Managers list"
+#~ msgid "Managers list:"
+#~ msgstr "Список менеджеров"
