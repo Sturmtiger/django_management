@@ -1,14 +1,15 @@
 {% extends 'layout.html' %}
-{% block title %}Companies list{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Companies list' %}{% endblock %}
 
 
 {% block content %}
-    <h1>Companies list:</h1>
+    <h1>{% trans 'Companies list' %}:</h1>
     <ul class='companies-list'>
     {% for company in companies %}
         <li><a href="{% url 'company_details' company.id %}">{{ company.name }}</a></li>
     {% empty %}
-        <li>There are no companies</li>
+        <li>{% trans 'There are no companies' %}</li>
     {% endfor %}
     </ul>
 {% endblock %}

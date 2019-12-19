@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% block title %}Employees list{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Employees list' %}{% endblock %}
 
 {% load static %}
 {% block css_link %}
@@ -7,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Employees list:</h1>
+<h1>{% trans 'Employees list' %}:</h1>
 <ul>
     {% for employee in employees %}
     <li>
@@ -16,7 +17,7 @@
         </a>
     </li>
     {% empty %}
-    <li>There are no employees</li>
+    <li>{% trans 'There are no employees' %}</li>
     {% endfor %}
 </ul>
 {% endblock %}

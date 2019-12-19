@@ -1,8 +1,9 @@
 {% extends 'layout.html' %}
-{% block title %}Managers list{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Managers list' %}{% endblock %}
 
 {% block content %}
-<h1>Managers list:</h1>
+<h1>{% trans 'Managers list:' %]</h1>
 <ul>
     {% for manager in managers %}
     <li>
@@ -10,7 +11,7 @@
     </li>
     {% empty %}
     <li>
-        <span class='not-found'>There are no managers</span>
+        <span class='not-found'>{% trans 'There are no managers' %}</span>
     </li>
     {% endfor %}
 </ul>

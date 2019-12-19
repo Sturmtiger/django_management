@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% block title %}Hire employee{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Hire employee' %}{% endblock %}
 
 {% load static %}
 {% block css_link %}
@@ -8,11 +9,11 @@
 
 {% block content %}
 <div class="form">
-    <h1>Hire employee</h1>
+    <h1>{% trans 'Hire employee' %}</h1>
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save">
-        <a href="{{ next }}">Cancel</a>
+        <input type="submit" value={% trans "Save" %}>
+        <a href="{{ next }}">{% trans 'Cancel' %}</a>
     </form>
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% block title %}Companies list{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Company details' %}{% endblock %}
 
 {% load static %}
 {% block css_link %}
@@ -10,21 +11,21 @@
 
 <div>
     <hr>
-    <h1>Company name: {{ company.name }}</h1>
+    <h1>{% trans 'Company name' %}: {{ company.name }}</h1>
 
     <hr>
-    <a href="{% url 'company_managers_list' company.id %}">Managers list</a>
+    <a href="{% url 'company_managers_list' company.id %}">{% trans 'Managers list' %}</a>
 
     <hr>
-    <p>Jobs:</p>
+    <p>{% trans 'Jobs' %}:</p>
     {% if not company.jobs.all %}
-    <p class='not-found'>There are no jobs in the company</p>
+    <p class='not-found'>{% trans 'There are no jobs in the company' %}</p>
     {% endif %}
 
     <div class='work-list-container'>
 
         <div class="work-list-item">
-            <a href="{% url 'job_create' company.id %}?next={{ request.path }}">Create new job</a>
+            <a href="{% url 'job_create' company.id %}?next={{ request.path }}">{% trans 'Create new job' %}</a>
         </div>
 
         {% for job in company.jobs.all %}
@@ -41,14 +42,14 @@
                     </span>
                     {% else %}
                     <a href="{% url 'workplace_hire' pk=workplace.id %}?next={{ request.path }}" class='vacant-place'>
-                        Vacant place
+                        {% trans 'Vacant place' %}
                     </a>
                     {% endif %}
                 </li>
                 {% endfor %}
             </ol>
             {% else %}
-            <p class='not-found'>There are no work places at this company job</p>
+            <p class='not-found'>{% trans 'There are no work places at this job' %}</p>
             {% endif %}
         </div>
         {% endfor %}
