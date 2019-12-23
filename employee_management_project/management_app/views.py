@@ -13,8 +13,6 @@ from .forms import WorkTimeForm
 
 sentry_logger = logging.getLogger('sentry_logger')
 
-# Create your views here.
-
 
 class CompaniesListView(ListView):
     """Companies list View."""

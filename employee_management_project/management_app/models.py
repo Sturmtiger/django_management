@@ -7,8 +7,6 @@ APPROVED = 'A'
 CANCELLED = 'C'
 FINISHED = 'F'
 
-# Create your models here.
-
 
 class Company(models.Model):
     """Company model."""
