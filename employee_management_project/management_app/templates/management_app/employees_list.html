@@ -11,7 +11,7 @@
 <ul>
     {% for employee in employees %}
     <li>
-        <a href="{% url 'employee_details' employee.id %}">
+        <a href="{% url 'management:employee_details' employee.id %}">
             {{ employee.name }}
         </a>
     </li>

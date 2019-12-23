@@ -15,8 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from .drf_app import views
 
-urlpatterns = [     
-    path('', include('management_app.urls')),
+
+# DRF API config
+router = routers.DefaultRouter()
+router.register(r'companies', views.CompanyViewSet)
+router.register(r'managers', views.ManagerViewSet)
+router.register(r'employees', views.EmployeeViewSet)
+router.register(r'jobs', views.JobViewSet)
+router.register(r'workplaces', views.WorkPlaceViewSet)
+router.register(r'worktimes', views.WorkTimeViewSet)
+router.register(r'statistics', views.StatisticsViewSet)
+
+urlpatterns = [
+    path('', include('management_app.urls', namespace='management_app')),
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
 ]

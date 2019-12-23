@@ -21,7 +21,7 @@
             
             <p>{{ workplace.job.name }} in {{ workplace.job.company.name }}</p>
             {% if workplace.get_status_display == 'Approved' %}
-            <a href="{% url 'worktime_create' workplace.id %}?next={{ request.path }}">Create worktime</a>
+            <a href="{% url 'management:worktime_create' workplace.id %}?next={{ request.path }}">Create worktime</a>
             {% else %}
             <p class='not-found'>Finished</p>
             {% endif %}

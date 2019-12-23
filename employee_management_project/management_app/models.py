@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-# Contants for status field
+# Constants for status field
 NEW = 'N'
 APPROVED = 'A'
 CANCELLED = 'C'

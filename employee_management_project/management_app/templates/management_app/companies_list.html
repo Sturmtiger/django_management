@@ -6,7 +6,7 @@
     <h1>Companies list:</h1>
     <ul class='companies-list'>
     {% for company in companies %}
-        <li><a href="{% url 'company_details' company.id %}">{{ company.name }}</a></li>
+        <li><a href="{% url 'management:company_details' company.id %}">{{ company.name }}</a></li>
     {% empty %}
         <li>There are no companies</li>
     {% endfor %}

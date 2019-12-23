@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-# sentry 
+# sentry
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+# from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 # celery
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'management_app.apps.ManagementAppConfig',
 ]
 
@@ -135,12 +136,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-
+# auth URLs
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'companies_list'
 LOGOUT_REDIRECT_URL = 'login'
 
-
+# email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
@@ -172,7 +173,7 @@ sentry_sdk.init(
     integrations=[sentry_logging],
 )
 
-
+# CELERY
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
 CELERY_TIMEZONE = 'Europe/Kiev'
@@ -188,4 +189,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'management_app.tasks.create_statistics',
         'schedule': crontab(hour=0, minute=0, day_of_week=1),
     },
+}
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
