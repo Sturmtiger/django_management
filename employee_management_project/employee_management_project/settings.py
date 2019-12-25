@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'management_app.apps.ManagementAppConfig',
+    'auth_app.apps.AuthAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -138,9 +139,9 @@ STATICFILES_DIRS = [
 ]
 
 # auth URLs
-# LOGIN_URL = 'login'
-# LOGIN_REDIRECT_URL = 'companies_list'
-# LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'management:companies_list'
+LOGOUT_REDIRECT_URL = 'login'
 
 # email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -196,6 +197,7 @@ CELERY_BEAT_SCHEDULE = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,

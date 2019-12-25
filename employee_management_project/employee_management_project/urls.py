@@ -21,8 +21,15 @@ from management_app.api.urls import router
 
 urlpatterns = [
     path('', include('management_app.urls', namespace='management_app')),
-    path('', include(router.urls)),
+    path('', include('auth_app.urls')),
+    # Django authentication
+    path('api/', include(router.urls)),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    path('docs/', get_swagger_view(title='Management API')),
+    path('docs/', get_swagger_view(title='Management API'), name='docs'),
     path('admin/', admin.site.urls),
+]
+
+urlpatterns += [
+    # DRF API authentication(same session with Django)
+    path('api-auth/', include('rest_framework.urls')),
 ]
