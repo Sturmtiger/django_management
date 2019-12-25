@@ -22,7 +22,6 @@ from celery.schedules import crontab
 
 import logging
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -50,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
     'management_app.apps.ManagementAppConfig',
 ]
 
@@ -137,9 +138,9 @@ STATICFILES_DIRS = [
 ]
 
 # auth URLs
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'companies_list'
-LOGOUT_REDIRECT_URL = 'login'
+# LOGIN_URL = 'login'
+# LOGIN_REDIRECT_URL = 'companies_list'
+# LOGOUT_REDIRECT_URL = 'login'
 
 # email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -193,6 +194,10 @@ CELERY_BEAT_SCHEDULE = {
 
 # DRF
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }

@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_swagger.views import get_swagger_view
 from management_app.api.urls import router
 
 urlpatterns = [
     path('', include('management_app.urls', namespace='management_app')),
     path('', include(router.urls)),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('docs/', get_swagger_view(title='Management API')),
     path('admin/', admin.site.urls),
 ]
