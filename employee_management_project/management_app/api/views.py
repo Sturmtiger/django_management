@@ -7,8 +7,7 @@ from management_app.models import (Company, Manager, Employee, Job,
                                    WorkPlace, WorkTime, Statistics,)
 from .serializers import (CompanySerializer, ManagerSerializer, EmployeeSerializer,
                           JobSerializer, WorkPlaceSerializer, WorkTimeSerializer,
-                          StatisticsSerializer,)
-from .serializers import *
+                          StatisticsSerializer, StatisticsUpdateSerializer)
 
 
 class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,8 +49,8 @@ class StatisticsViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         serializer_class = self.serializer_class
 
-        if self.request.method == 'PUT':
-            serializer_class = StatisticsPutSerializer
+        if self.request.method in ('PUT', 'PATCH'):
+            serializer_class = StatisticsUpdateSerializer
 
         return serializer_class
 
