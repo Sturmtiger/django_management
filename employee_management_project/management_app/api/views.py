@@ -8,9 +8,10 @@ from management_app.models import (Company, Manager, Employee, Job,
 from .serializers import (CompanySerializer, ManagerSerializer, EmployeeSerializer,
                           JobSerializer, WorkPlaceSerializer, WorkTimeSerializer,
                           StatisticsSerializer,)
+from .serializers import *
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
+class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     queryset = Company.objects.all()
@@ -45,6 +46,14 @@ class WorkTimeViewSet(viewsets.ModelViewSet):
 class StatisticsViewSet(viewsets.ModelViewSet):
     queryset = Statistics.objects.all()
     serializer_class = StatisticsSerializer
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+
+        if self.request.method == 'PUT':
+            serializer_class = StatisticsPutSerializer
+
+        return serializer_class
 
     @action(detail=False)
     def hours_descend(self, request):

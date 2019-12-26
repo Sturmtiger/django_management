@@ -53,3 +53,10 @@ class StatisticsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Statistics
         fields = ('url', 'workplace', 'hours_total', 'timestamp',)
+
+
+class StatisticsPutSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Statistics
+        fields = ('url', 'workplace', 'hours_total', 'timestamp',)
+        read_only_fields = ('workplace',)
