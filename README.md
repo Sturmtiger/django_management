@@ -10,7 +10,7 @@ celery -A celery_app worker -B -l INFO -Q create_statistics,send_mail *- (run sc
 |URL| Content-Type | Params | Decs |
 |--|--|--|--|
 |     http://127.0.0.1:8000/api-token-auth/  | application/json | username, password| Get token |
-# Interaction with AuthenticatedOnly URLs
+# Interaction with AuthenticatedOnly API URLs
 Use your token for this
 
-    curl http://127.0.0.1:8000/companies/ -H 'Authorization: Token 4534f7aa7905e012b3c2300408c3dfdf390fcddf'
+    curl http://127.0.0.1:8000/api/companies/ -H 'Authorization: Token 4534f7aa7905e012b3c2300408c3dfdf390fcddf'
