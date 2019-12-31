@@ -9,7 +9,7 @@ from .models import (Company, Manager, Employee, Job,
                      WorkPlace, WorkTime)
 from .models import APPROVED, FINISHED
 from .forms import WorkTimeForm
-# from .tasks import *
+
 
 sentry_logger = logging.getLogger('sentry_logger')
 
@@ -70,7 +70,7 @@ class CreateJobView(CreateView):
 
         return super().form_valid(form)
 
-    
+
 class EmployeesListView(ListView):
     """Employees list View."""
     model = Employee

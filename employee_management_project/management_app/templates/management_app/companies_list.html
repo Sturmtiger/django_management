@@ -3,12 +3,32 @@
 
 
 {% block content %}
-    <h1>Companies list:</h1>
-    <ul class='companies-list'>
+<h1>Companies list:</h1>
+<ul class='companies-list'>
     {% for company in companies %}
-        <li><a href="{% url 'management:company_details' company.id %}">{{ company.name }}</a></li>
+    <li><a href="{% url 'management:company_details' company.id %}">{{ company.name }}</a></li>
     {% empty %}
-        <li>There are no companies</li>
+    <li>There are no companies</li>
     {% endfor %}
-    </ul>
+</ul>
+
+<script>
+    var companyListSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/');
+
+    companyListSocket.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var reload_page = data['reload_page'];
+        console.log(reload_page);
+
+        if (reload_page) {
+            location.reload();
+        }
+    };
+
+    companyListSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+</script>
+
 {% endblock %}

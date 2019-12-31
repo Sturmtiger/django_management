@@ -7,7 +7,7 @@
 celery -A celery_app worker -B -l INFO -Q create_statistics,send_mail *- (run scheduled task `create_statistics` and its subtask `send_mail_if_overtime` in different queues)*
 
 # Token-Auth
-|URL| Content-Type | Params | Decs |
+|URL| Content-Type | Params | Description |
 |--|--|--|--|
 |     http://127.0.0.1:8000/api-token-auth/  | application/json | username, password| Get token |
 # Interaction with AuthenticatedOnly API URLs

@@ -1,5 +1,10 @@
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 
 # Constants for status field
 NEW = 'N'
@@ -127,3 +132,16 @@ class Statistics(models.Model):
     )
     hours_total = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+@receiver(post_save)
+def companies_list_reload_page(**kwargs):
+    channel_layer = get_channel_layer()
+
+    async_to_sync(channel_layer.group_send)(
+        'companies_list',
+        {
+            'type': 'reload_page',
+            'reload_page': True,
+        }
+    )
