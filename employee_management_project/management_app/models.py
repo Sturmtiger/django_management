@@ -134,7 +134,7 @@ class Statistics(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-@receiver(post_save)
+@receiver(post_save, sender=Company)
 def companies_list_reload_page(**kwargs):
     channel_layer = get_channel_layer()
 
