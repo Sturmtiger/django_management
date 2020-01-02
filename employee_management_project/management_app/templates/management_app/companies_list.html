@@ -13,20 +13,19 @@
 </ul>
 
 <script>
-    var companyListSocket = new WebSocket(
+    var companiesListSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/');
 
-    companyListSocket.onmessage = function (e) {
+    companiesListSocket.onmessage = function (e) {
         var data = JSON.parse(e.data);
         var reload_page = data['reload_page'];
-        console.log(reload_page);
 
         if (reload_page) {
             location.reload();
         }
     };
 
-    companyListSocket.onclose = function (e) {
+    companiesListSocket.onclose = function (e) {
         console.error('Chat socket closed unexpectedly');
     };
 </script>

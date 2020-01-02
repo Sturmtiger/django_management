@@ -60,7 +60,7 @@ class Job(models.Model):
         return f'{self.name}(id:{self.id}) the Job at {self.company}'
 
     class Meta:
-        unique_together = ['company', 'name']
+        unique_together = ('company', 'name')
 
 
 class WorkPlace(models.Model):
@@ -93,8 +93,8 @@ class WorkPlace(models.Model):
         return f'Work place(id:{self.id}) of {self.job}'
 
     class Meta:
-        unique_together = ['job', 'employee']
-        ordering = ['-employee']
+        unique_together = ('job', 'employee')
+        ordering = ('-employee',)
 
 
 class WorkTime(models.Model):
@@ -116,8 +116,8 @@ class WorkTime(models.Model):
         return f'WorkTime({self.id}) of {self.workplace}({self.workplace.id})'
 
     class Meta:
-        unique_together = ['workplace', 'date']
-        ordering = ['-date']
+        unique_together = ('workplace', 'date')
+        ordering = ('-date',)
 
 
 class Statistics(models.Model):

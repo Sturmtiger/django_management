@@ -41,7 +41,7 @@ class CompanyManagersListView(ListView):
 class CreateJobView(CreateView):
     """Create job View."""
     model = Job
-    fields = ['company', 'name']
+    fields = ('company', 'name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,11 +83,12 @@ class EmployeeDetailsView(DetailView):
     model = Employee
     template_name = 'management_app/employee_details.html'
 
-
+from django.http import HttpResponse
+from django.db import IntegrityError
 class HireEmployeeView(UpdateView):
     """Hire employee View."""
     model = WorkPlace
-    fields = ['employee']
+    fields = ('employee',)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,31 +99,37 @@ class HireEmployeeView(UpdateView):
         return self.request.GET.get('next', '/')
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        # set status of 'approved' when the employee is hired
-        self.object.status = APPROVED
-        self.object.save()
+        try:
+            self.object = form.save(commit=False)
+            # set status of 'approved' when the employee is hired
+            self.object.status = APPROVED
+            self.object.save()
 
-        # set status of 'finished' for previous workplaces of the employee
-        employee = self.object.employee
-        prev_unfinished_workplaces = employee.workplaces.exclude(
-            Q(id=self.object.id) | Q(status=FINISHED)
-        )
-        for workplace in prev_unfinished_workplaces:
-            workplace.status = FINISHED
-            workplace.save()
-
-        posted_data = self.request.POST
-        if posted_data['employee']:
-            sentry_logger.debug(
-                'Employee data',
-                extra={
-                    'employee_id': posted_data['employee'],
-                }
+            # set status of 'finished' for previous workplaces of the employee
+            employee = self.object.employee
+            prev_unfinished_workplaces = employee.workplaces.exclude(
+                Q(id=self.object.id) | Q(status=FINISHED)
             )
-            sentry_logger.info('Hired employee')
+            for workplace in prev_unfinished_workplaces:
+                workplace.status = FINISHED
+                workplace.save()
 
-        return super().form_valid(form)
+            posted_data = self.request.POST
+            if posted_data['employee']:
+                sentry_logger.debug(
+                    'Employee data',
+                    extra={
+                        'employee_id': posted_data['employee'],
+                    }
+                )
+                sentry_logger.info('Hired employee')
+
+            return super().form_valid(form)
+
+        except IntegrityError as e:
+            form.add_error('employee', 'This employee has already been hired for this job.')
+
+            return self.form_invalid(form)
 
 
 class CreateWorkTimeView(FormView):
