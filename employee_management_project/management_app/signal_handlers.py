@@ -1,12 +1,12 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from .models import Company
 
 
-@receiver(post_save, sender=Company)
+@receiver([post_save, post_delete], sender=Company)
 def companies_list_reload_page(**kwargs):
     """
     Automatically reloads companies list page 
