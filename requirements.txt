@@ -20,7 +20,7 @@ coreschema==0.0.4
 cryptography==2.8
 daphne==2.4.1
 decorator==4.4.1
-Django==2.2.7
+Django==2.2.22
 django-debug-toolbar==2.1
 django-rest-swagger==2.2.0
 djangorestframework==3.11.0
